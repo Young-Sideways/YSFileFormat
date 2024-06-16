@@ -1,0 +1,38 @@
+# Build results
+[Dd]ebug/
+[Rr]elease/
+[Ii]nstall/
+[Bb]in/
+[Oo]bj/
+[Oo]ut/
+[Ll]og/
+[Ll]ogs/
+
+# Visual Studio 2015/2017 cache/options directory
+.vs/
+.vscode/
+.idea/
+
+# Visual Studio 2017 auto generated files
+Generated\ Files/
+
+
+# Visual Studio cache files
+# files ending in .cache can be ignored
+*.[Cc]ache
+# but keep track of directories ending in .cache
+!?*.[Cc]ache/
+
+# Others
+~$*
+*~
+
+# Python Tools for Visual Studio (PTVS)
+__pycache__/
+*.pyc
+
+# Tabs Studio
+*.tss
+
+# Doxygen
+html/
