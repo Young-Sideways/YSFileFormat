@@ -1,1 +1,1 @@
-/usr/bin/clang -g CMakeFiles/ysff.dir/src/ysff.c.o CMakeFiles/ysff.dir/main.c.o -o ysff 
+/usr/bin/clang -g CMakeFiles/ysff.dir/src/ysff.c.o CMakeFiles/ysff.dir/main.c.o -o ysff   -L/home/pc/Projects/YSFileFormat/inc 

@@ -22,4 +22,15 @@ CMakeFiles/ysff.dir/main.c.o: /home/pc/Projects/YSFileFormat/main.c \
   /usr/include/x86_64-linux-gnu/bits/stdio_lim.h \
   /usr/include/x86_64-linux-gnu/bits/floatn.h \
   /usr/include/x86_64-linux-gnu/bits/floatn-common.h \
-  /home/pc/Projects/YSFileFormat/inc/ysff/ysff.h
+  /home/pc/Projects/YSFileFormat/inc/ysff/ysff.h /usr/include/string.h \
+  /usr/include/x86_64-linux-gnu/bits/types/locale_t.h \
+  /usr/include/x86_64-linux-gnu/bits/types/__locale_t.h \
+  /usr/include/strings.h /usr/include/wchar.h \
+  /usr/include/x86_64-linux-gnu/bits/wchar.h \
+  /usr/include/x86_64-linux-gnu/bits/types/wint_t.h \
+  /usr/include/x86_64-linux-gnu/bits/types/mbstate_t.h \
+  /usr/include/uchar.h \
+  /home/pc/Projects/YSFileFormat/inc/ysff/ysff_type.h \
+  /usr/lib/llvm-14/lib/clang/14.0.0/include/stdint.h \
+  /usr/include/stdint.h /usr/include/x86_64-linux-gnu/bits/stdint-intn.h \
+  /usr/include/x86_64-linux-gnu/bits/stdint-uintn.h

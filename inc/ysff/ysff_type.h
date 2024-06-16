@@ -1,8 +1,8 @@
 /*******************************************************************************
- * @file ysff.h
- * @author Young Sideways
- * @brief 
- * @date 15.06.2024
+ * @file      ysff.h
+ * @author    Young Sideways
+ * @brief     
+ * @date      15.06.2024
  * @copyright young.sideways@mail.ru, Copyright (c) 2024. All right reserved.
  ******************************************************************************/
 
@@ -14,11 +14,78 @@
 #pragma region --- INCLUDE ---
 
 #include <stdint.h>
-#include <stdlib.h>
 
 #pragma endregion
 
+/*
+--------------------------------------------------------------------- DATA FIELDS EXPLANATION ----------------------------------------------------------------------
+
+bytes   :   [                                                                        0 byte                                                                        ]
+bits    :   [        0        ][        1        ][        2        ][        3        ][        4        ][        5        ][        6        ][        7        ]
+
+INTEGER   : [                        YS_INT                         ][            YS_INT_SIGNED           ][                       YS_INT_8                        ]
+                                                                                 YS_INT_UNSIGNED                                   YS_INT_16
+                                                                                 YS_INT_BITFIELD                                   YS_INT_32
+                                                                                                                                   YS_INT_64
+                                                                                                                                   YS_INT_128
+
+FLOAT     : [                       YS_FLOAT                        ][           YS_FLOAT_SINGLE          ][           YS_FLOAT_REAL            ][    RESERVED     ]
+                                                                                 YS_FLOAT_DOUBLE                     YS_FLOAT_IMAGINARY
+                                                                                                                      YS_FLOAT_COMPLEX
+
+STRING    : [                       YS_STRING                       ][          YS_STRING_SINGLE          ][          YS_STRING_CHAR_8           ][    RESERVED     ]
+                                                                                YS_STRING_MULTI                       YS_STRING_CHAR_16
+                                                                                                                      YS_STRING_CHAR_32
+
+*/
+
 #pragma region --- MACRO ---
+
+#define YS_UNDEFINED        (0x0 )
+
+#define YS_TYPE_INT         (0x1 )
+#define YS_TYPE_FLOAT       (0x2 )
+#define YS_TYPE_STRING      (0x3 )
+#define YS_TYPE_TIMESTAMP   (0x4 )
+#define YS_TYPE_UUID        (0x5 )
+#define YS_TYPE_MASK        (0x7 )
+
+
+#define YS_INT_SIGNED       (0x8 )
+#define YS_INT_UNSIGNED     (0x10)
+#define YS_INT_BITFIELD     (0x18)
+#define YS_INT_SIGN_MASK    (0x18)
+
+#define YS_INT_8            (0x20)
+#define YS_INT_16           (0x40)
+#define YS_INT_32           (0x60)
+#define YS_INT_64           (0x80)
+#define YS_INT_128          (0xA0)
+#define YS_INT_SIZE_MASK    (0xE0)
+
+
+
+#define YS_FLOAT_SINGLE     (0x8 )
+#define YS_FLOAT_DOUBLE     (0x10)
+#define YS_FLOAT_SIZE_MASK  (0x18)
+
+#define YS_FLOAT_REAL       (0x20)
+#define YS_FLOAT_IMAGINARY  (0x40)
+#define YS_FLOAT_COMPLEX    (0x60)
+#define YS_FLOAT_TYPE_MASK  (0x60)
+
+
+
+#define YS_STRING_SINGLE    (0x8 )
+#define YS_STRING_MULTI     (0x10)
+#define YS_STRING_MASK      (0x18)
+
+#define YS_STRING_CHAR_8    (0x20)
+#define YS_STRING_CHAR_16   (0x40)
+#define YS_STRING_CHAR_32   (0x60)
+#define YS_STRING_CHAR_MASK (0x60)
+
+
 
 #define DEFAULT_TIMESTAMP   \
     (ys_timestamp_t){       \
@@ -31,6 +98,11 @@
         .lo = UINT64_C(0)   \
     };
 
+
+
+#define YS_SIZE_MIN UINT32_C(0)
+#define YS_SIZE_MAX UINT32_MAX
+
 #pragma endregion
 
 #pragma region --- TYPEDEF ---
@@ -41,76 +113,68 @@ typedef struct ys_timestamp_s {
 } ys_timestamp_t;
 
 typedef struct ys_uuid_s {
-    uint64_t hi;
     uint64_t lo;
+    uint64_t hi;
 } ys_uuid_t;
 
-typedef enum ys_data_type_e : uint8_t {
-    YS_UNDEFINED  = 0x0,
-
-    YS_NONE       = 0x1,
-
-    YS_INT        = 0x2,
-    YS_FLOAT      = 0x3,
-    YS_STRING     = 0x4,
-    YS_TIMESTAMP  = 0x5,
-    YS_UUID       = 0x6
-
-    // RESERVED
-} ys_data_type_t;
-
-typedef enum ys_int_sign_e : uint8_t {
-    YS_INT_SIGNED   = 0x0,
-    YS_INT_UNSIGNED = 0x1
-} ys_int_sign_t;
-typedef enum ys_int_type_e : uint8_t {
-    YS_INT_8  = 0x0,
-    YS_INT_16 = 0x1,
-    YS_INT_32 = 0x2,
-    YS_INT_64 = 0x3
-} ys_int_type_e;
-
-typedef enum ys_float_type_e : uint8_t {
-    YS_FLOAT_SINGLE = 0x0,
-    YS_FLOAT_DOUBLE = 0x1
-} ys_float_type_t;
-
-typedef enum : uint8_t {
-    YS_STRING_ASCII,
-    YS_STRING_MULTI,
-    YS_STRING_UTF8 ,
-    YS_STRING_UTF16,
-    YS_STRING_UTF32
-} ys_encoding_t;
-
-typedef enum ys_byte_order_e : uint8_t {
-    YS_BIG_ENDIAN    = 0x0,
-    YS_LITTLE_ENDIAN = 0x1,
-} ys_byte_order_t;
-
 typedef uint32_t ys_size_t;
-#define YST_DATA_SIZE_MIN UINT32_C(0)
-#define YST_DATA_SIZE_MAX UINT32_MAX
 
+typedef struct ys_string_s {
+    uint64_t  offset;
+    ys_size_t size  ;
+} ys_string_t;
 
+typedef struct ys_int128_s {
+    uint64_t lo;
+    int64_t  hi;
+} ys_int128_t;
+typedef struct ys_uint128_s {
+    uint64_t lo;
+    uint64_t hi;
+} ys_uint128_t;
 
-/*
------------------------------------------------- DATA FIELDS EXPLANATION ------------------------------------------------
+typedef struct { float value; }  ys_float_i ;
+typedef struct { double value; } ys_double_i;
 
-INTEGER :   [                                             0 byte                                               ]
-      bits: [   0..2    ][           3             ][                    4..6                      ][    7     ]
-            [  YS_INT   ][ YS_INT_SIGNED | YS_INT_UNSIGNED ][ YS_INT_8 | YS_INT_16 | YS_INT_32 | YS_INT_64 ][ RESERVED ]
+typedef struct ys_float_c_s {
+    float real;
+    float imaginary;
+} ys_float_c;
+typedef struct ys_double_c_s {
+    double real;
+    double imaginary;
+} ys_double_c;
 
-FLOAT   :   [                                             0 byte                                               ]
-      bits: [   0..2    ][            3            ][                           4..7                           ]
-            [ YS_FLOAT  ][  YS_SINGLE | YS_DOUBLE  ][                         RESERVED                         ]
+typedef union ys_data_u {
+    uint8_t         v_uint8_t    ;
+    uint16_t        v_uint16_t   ;
+    uint32_t        v_uint32_t   ;
+    uint64_t        v_uint64_t   ;
+    __uint128_t     v_uint128_t  ;
+    int8_t          v_int8_t     ;
+    int16_t         v_int16_t    ;
+    int32_t         v_int32_t    ;
+    int64_t         v_int64_t    ;
+    __int128_t      v_int128_t   ;
 
-STRING  :   [                                             0 byte                                               ]
-      bits: [   0..2    ][            3            ][                           4..7                           ]
-            [ YS_STRING ][  YS_SINGLE | YS_DOUBLE  ][                         RESERVED                         ]         
-*/
+    float           v_float      ;
+    double          v_float_i    ;
+    float _Complex  v_float_c    ;
+    double          v_double     ;
+    double          v_double_i   ;
+    double _Complex v_double_c   ;
+
+    ys_string_t     v_string_t   ;
+
+    ys_timestamp_t  v_timestamp_t;
+    ys_uuid_t       v_uuid_t     ;
+} ys_data_t;
+
+typedef struct ys_field_s {
+    uint8_t   type;
+    ys_data_t data;
+} ys_field_t;
+
 #pragma endregion
-
-
 
 #endif // !YSFF_TYPE_H_
