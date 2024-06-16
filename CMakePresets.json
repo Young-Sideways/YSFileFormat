@@ -1,0 +1,16 @@
+{
+    "version": 3,
+    "configurePresets": [
+        {
+            "name": "linux-clang",
+            "displayName": "Clang 14.0.0 x86_64-pc-linux-gnu",
+            "binaryDir": "${sourceDir}/out/build/${presetName}",
+            "installDir": "${sourceDir}/out/install/${presetName}",
+            "cacheVariables": {
+                "CMAKE_C_COMPILER": "/usr/bin/clang",
+                "CMAKE_CXX_COMPILER": "/usr/bin/clang++",
+                "CMAKE_BUILD_TYPE": "Debug"
+            }
+        }
+    ]
+}
